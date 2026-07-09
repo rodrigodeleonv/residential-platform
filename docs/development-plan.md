@@ -112,7 +112,6 @@ Each phase ends with working, tested, deployable software.
 
 ## 6. Open questions
 
-1. **Admin role split**: is the residential admin also the platform admin, or should a separate technical/platform role exist? Recommendation pending confirmation: keep a single Admin role; platform-level operations (deploys, migrations) live outside the app.
-2. **Market comparison**: research TeleEntry and similar platforms to identify key features worth adopting — pending, can run anytime.
-3. **Reservation details** (Phase 6): booking time granularity (hourly? full-day?), cancellation policy, and whether any area has a cost — to be defined when the phase starts.
-4. **Audit retention & visibility** (Phase 5+): scope is defined; still open — how long audit records are kept and who can view them (admins only?).
+1. **Market comparison**: research TeleEntry and similar platforms to identify key features worth adopting — pending, can run anytime.
+2. **Reservation details** (Phase 6): booking time granularity (hourly? full-day?), cancellation policy, and whether any area has a cost — to be defined when the phase starts.
+3. **Audit retention & visibility** (Phase 5+): scope is defined; still open — how long audit records are kept and who can view them (admins only?).
