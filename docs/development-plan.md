@@ -40,6 +40,7 @@ Guiding constraint from requirements: avoid over-engineering, prefer simplicity,
 - **Database**: PostgreSQL, SQLAlchemy 2.0 (async), Alembic for migrations.
 - **AuthZ**: role-based with unit-scoped checks (e.g. "is current user a resident of unit X?"). Roles are assignments, not user types, since one person can be admin + owner + resident.
 - **Sessions**: httpOnly cookie sessions (server-side) rather than JWT — simpler and revocable, fine for a single first-party web app.
+- **API versioning**: all backend endpoints live under the `/api/v0/` prefix. `v0` while the API is unstable/pre-release; bump to `v1`, `v2`, … only on breaking changes once stabilized.
 - **Frontend**: Vite + React + TypeScript SPA in `apps/web`, talking to the API. react-i18next for ES/EN. Responsive layout (multi-device = responsive web; no native app planned).
 - **Frontend testing**: Vitest + React Testing Library (unit), Playwright (e2e). Backend: pytest + httpx test client.
 - **Deployment**: Docker Compose (api, web, postgres). Must run both in the cloud and locally/on-premises.

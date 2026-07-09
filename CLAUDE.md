@@ -17,6 +17,7 @@ Residential Platform: a condominium/residential management SaaS (single deployme
 - TypeScript whenever possible on the frontend — no plain JS.
 - Do not add Claude as co-author in git commits.
 - Avoid over-engineering; prefer the simple design. Scale target is small (~400 users).
+- All API endpoints go under the `/api/v0/` prefix (version bumps only on breaking changes).
 - Every feature is completed together with tests that validate it (pytest on the backend; Vitest/Playwright on the frontend once it exists).
 
 ## Commands (backend, run from `apps/api/`)
