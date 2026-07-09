@@ -1,0 +1,23 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-python.sh",
+            "timeout": 120,
+            "statusMessage": "Running ruff + pyright"
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-frontend.sh",
+            "timeout": 120,
+            "statusMessage": "Running frontend lint + typecheck"
+          }
+        ]
+      }
+    ]
+  }
+}
