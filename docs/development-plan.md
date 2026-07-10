@@ -84,6 +84,7 @@ Each phase ends with working, tested, deployable software.
 - Vehicle registry per unit (plate, more than 2 allowed)
 
 ### Phase 4 — Frontend foundation
+- Prerequisite: install Node.js LTS (nothing frontend-related is installed on the dev machine yet; npm ships with Node — deliberately deferred until this phase)
 - Scaffold `apps/web` (Vite + React + TS), i18n ES/EN from day one
 - Auth screens (email → code/link), session handling
 - App shell with role-aware navigation (admin area vs resident area)
