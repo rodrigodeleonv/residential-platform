@@ -59,10 +59,10 @@ Each phase ends with working, tested, deployable software.
 ### Phase 0 — Foundations (mostly done)
 - [x] Monorepo, git, `uv` project in `apps/api` with FastAPI, ruff, pyright
 - [x] Claude Code hooks for Python (ruff + pyright) and frontend
-- [ ] Backend skeleton: app factory, settings (pydantic-settings), health endpoint
-- [ ] Docker Compose for local dev (api + postgres)
-- [ ] SQLAlchemy + Alembic wiring, first empty migration
-- [ ] pytest setup with a database fixture
+- [x] Backend skeleton: app factory, settings (pydantic-settings), health endpoint
+- [x] Docker Compose for local dev (api + postgres)
+- [x] SQLAlchemy + Alembic wiring, first empty migration
+- [x] pytest setup with a database fixture (test db + per-test transaction rollback)
 - [ ] GitHub Actions CI (lint + typecheck + tests)
 
 ### Phase 1 — Users, roles, passwordless auth

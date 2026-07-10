@@ -19,12 +19,17 @@ Residential Platform: a condominium/residential management SaaS (single deployme
 - Avoid over-engineering; prefer the simple design. Scale target is small (~400 users).
 - All API endpoints go under the `/api/v0/` prefix (version bumps only on breaking changes).
 - Every feature is completed together with tests that validate it (pytest on the backend; Vitest/Playwright on the frontend once it exists).
+- **All tests must pass before every commit** (`uv run pytest` from `apps/api/`).
+- Code style: readable and human-friendly over verbose; modern syntax; full type annotations except where impractical; prefer comprehensions / `functools` / `itertools` when they aid clarity. Balance readability with efficiency.
+- Infrastructure runs in Docker, never installed on the host OS: PostgreSQL always via `docker compose up -d postgres` (root `docker-compose.yml`).
 
 ## Commands (backend, run from `apps/api/`)
 
 - `uv sync` — install/sync dependencies
 - `uv run ruff check .` / `uv run ruff format .` — lint / format
 - `uv run pyright` — type check
-- `uv run pytest` — tests (pytest is the chosen test runner; not yet added)
+- `uv run pytest` — tests (needs the compose postgres running; uses a separate `residential_test` db)
+- `uv run alembic upgrade head` — apply migrations; `uv run alembic revision --autogenerate -m "…"` — new migration
+- `uv run uvicorn app.main:app --reload` — run the API locally
 
 Add dependencies with `uv add <pkg>` (or `uv add --dev <pkg>`), never by editing `pyproject.toml` by hand.

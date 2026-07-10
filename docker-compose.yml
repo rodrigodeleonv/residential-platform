@@ -1,0 +1,32 @@
+name: residential
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: residential
+      POSTGRES_PASSWORD: residential
+      POSTGRES_DB: residential
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U residential -d residential"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: apps/api
+    environment:
+      APP_DATABASE_URL: postgresql+asyncpg://residential:residential@postgres:5432/residential
+      APP_ENVIRONMENT: local
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
