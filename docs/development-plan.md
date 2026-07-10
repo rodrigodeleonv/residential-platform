@@ -63,7 +63,7 @@ Each phase ends with working, tested, deployable software.
 - [x] Docker Compose for local dev (api + postgres)
 - [x] SQLAlchemy + Alembic wiring, first empty migration
 - [x] pytest setup with a database fixture (test db + per-test transaction rollback)
-- [ ] GitHub Actions CI (lint + typecheck + tests)
+- [ ] GitHub Actions CI (lint + typecheck + tests) — deferred until the GitHub repo is set up
 
 ### Phase 1 — Users, roles, passwordless auth
 - User model, role assignments (admin / owner / tenant / guard)
