@@ -2,25 +2,27 @@
 
 Source of truth for business rules: `requeriments.md` (Spanish, gitignored). This document translates those requirements into an implementation plan. When the two disagree, `requeriments.md` wins — flag the mismatch and update this plan.
 
+Deployment-specific values (amenity catalog, time windows, capacities, retention periods) live only in the private requirements document; this plan deliberately keeps them generic.
+
 ## 1. Product summary
 
-Management platform for a single condominium (not multi-tenant). Four user roles: **Admin** (the residential administrator, not a technical platform admin), **Owner** (legal owner of a unit, may or may not reside), **Tenant** (non-owner resident with time-boxed access), **Security guard** (gatehouse). One person can hold multiple roles (e.g. admin + resident). ~400 users total.
+Management platform for a single condominium (not multi-tenant). Four user roles: **Admin** (the residential administrator, not a technical platform admin), **Owner** (legal owner of a unit, may or may not reside), **Tenant** (non-owner resident with time-boxed access), **Security guard** (gatehouse). One person can hold multiple roles (e.g. admin + resident). A few hundred users total.
 
 Core modules: passwordless auth, units & occupancy, vehicles & parking, visitor management (gatehouse), common-area reservations, billing view (no payment processing yet), audit log.
 
 ## 2. Key business rules (settled)
 
-- **Units**: either an apartment in a tower (tower → floors → units) or an individual house. Each unit has exactly 2 assigned parking spots (fixed rule), but more than 2 vehicles may be registered per unit. Separate pool of temporary visitor parking spots.
+- **Units**: either an apartment in a multi-floor building (building → floors → units) or an individual house. Each unit has a fixed number of assigned parking spots, but more vehicles than spots may be registered per unit. Separate pool of temporary visitor parking spots.
 - **Occupancy**: a unit has 1+ legal owners (co-owners). A unit is occupied *either* by owners *or* by tenants, never both. Only responsible persons are registered (legal owners or tenants), not every family member.
 - **Owner access**: permanent while ownership stands, regardless of residing or renting out.
 - **Tenant access**: time-boxed by a contract date range set by the owner at registration. Registration by the owner *is* the authorization (no extra approval step). Access auto-deactivates at the end date; the owner can extend it. Any single co-owner can authorize/revoke tenants alone. Admins can also create/edit/revoke tenant registrations directly (support/disputes).
 - **Privileges**: only owners see the unit's account statement/debts. Reservations, visitor pre-registration, and vehicle registration belong to whoever actually resides in the unit (owner-occupant or tenant); a non-resident owner cannot do these remotely.
 - **Account creation (onboarding)**: admins create accounts (or send email invitations) for residents, other admins, and guards. Owners create accounts (or send email invitations) for their tenants.
-- **Gatehouse**: guards see a restricted data subset (responsible resident name, contact phone, vehicle plate, tower/house, unit number, assigned parking number). Two entry flows: (A) no pre-registration — guard phones the resident, who approves/denies live; (B) pre-registration — guard sees a valid pre-registration within its time window and lets the visitor in without a call.
-- **Visitor pre-registration**: resident picks date, time, and expiration (2h, 4h, or 6h). The guard only sees it within that window. Max 15 days in advance. Can be one-off or recurring (by day/time/expiration) over a range of at most 6 months.
-- **Visitor entry log**: entry AND exit are recorded. The guard hands out a cone (placed on the vehicle) with the assigned visitor parking number. Records are kept for 1 year.
+- **Gatehouse**: guards see a restricted data subset (responsible resident name, contact phone, vehicle plate, building/house, unit number, assigned parking number). Two entry flows: (A) no pre-registration — guard phones the resident, who approves/denies live; (B) pre-registration — guard sees a valid pre-registration within its time window and lets the visitor in without a call.
+- **Visitor pre-registration**: resident picks date, time, and one of a fixed set of expiration windows. The guard only sees the pre-registration within that window. Advance booking is capped, and pre-registrations can be one-off or recurring (by day/time/expiration) over a bounded range.
+- **Visitor entry log**: entry AND exit are recorded, along with the assigned visitor parking spot (a physical marker with the spot number goes on the vehicle). Records are kept for a defined retention period.
 - **Billing**: view-only. Pending debts (maintenance fee, common-area reservations, fines) and history of records manually marked as paid. Fines are issued by admins from a catalog of infraction types. No payment gateway integration for now; design so a provider abstraction can be added later.
-- **Reservable areas**: a module where admins define areas with intrinsic attributes (e.g. parallel-booking capacity). Areas are condominium-wide (not per tower/house zone). Initial catalog: Clubhouse (capacity 1), Soccer field (2), BBQ area (2), Camping (3).
+- **Reservable areas**: a module where admins define areas with intrinsic attributes (e.g. parallel-booking capacity). Areas are condominium-wide (not per building/zone). The initial catalog and capacities come from the private requirements document.
 - **Auth**: passwordless — email verification code and/or magic link.
 - **Email**: provider-independent abstraction; initially a mock provider that prints to the console (no real email protocol).
 - **i18n**: Spanish and English.
@@ -73,7 +75,7 @@ Each phase ends with working, tested, deployable software.
 - Audit hooks for login/logout and account changes on other users
 
 ### Phase 2 — Physical structure & occupancy
-- Towers, floors, units, houses; visitor parking spots
+- Buildings, floors, units, houses; visitor parking spots
 - Ownership (co-owners per unit) and tenancy (date-ranged, auto-expiry of access)
 - Owner flows: register/extend/revoke tenant; admin override flows
 - Enforce the owners-XOR-tenants occupancy rule
@@ -91,14 +93,14 @@ Each phase ends with working, tested, deployable software.
 - Admin UI + resident UI for phases 1–3 features
 
 ### Phase 5 — Visitors & gatehouse
-- Pre-registration by residents: date + time + expiration (2h/4h/6h), max 15 days ahead, one-off or recurring (≤ 6 months range)
+- Pre-registration by residents: date + time + expiration window, capped advance booking, one-off or recurring over a bounded range (values per the requirements doc)
 - Gatehouse screen for guards: lookup, restricted resident data view, flow A (live call result recorded) and flow B (valid pre-registration within window)
-- Entry/exit log with visitor parking (cone) number; 1-year retention
+- Entry/exit log with assigned visitor parking spot; retention per the requirements doc
 - Audit: pre-registration creation/modification, who authorized each entry
 
 ### Phase 6 — Common-area reservations
 - Reservable-areas module: admin-managed catalog with intrinsic attributes (parallel-booking capacity)
-- Seed initial areas: Clubhouse (1), Soccer field (2), BBQ area (2), Camping (3)
+- Seed the initial area catalog (names and capacities from the requirements doc)
 - Resident booking flow with capacity-aware conflict prevention; cancellation
 
 ### Phase 7 — Billing (view-only)
@@ -114,6 +116,6 @@ Each phase ends with working, tested, deployable software.
 
 ## 6. Open questions
 
-1. **Market comparison**: research TeleEntry and similar platforms to identify key features worth adopting — pending, can run anytime.
+1. **Market comparison**: research commercial condominium-management / gatehouse platforms to identify key features worth adopting — pending, can run anytime.
 2. **Reservation details** (Phase 6): booking time granularity (hourly? full-day?), cancellation policy, and whether any area has a cost — to be defined when the phase starts.
 3. **Audit retention & visibility** (Phase 5+): scope is defined; still open — how long audit records are kept and who can view them (admins only?).

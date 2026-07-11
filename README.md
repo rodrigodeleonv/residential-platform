@@ -1,6 +1,6 @@
 # Residential Platform
 
-Management platform for a single residential condominium (~400 users): units & occupancy, vehicles & parking, visitor management (gatehouse), common-area reservations, and billing view. Not multi-tenant — one deployment per condominium.
+Management platform for a single residential condominium (a few hundred users): units & occupancy, vehicles & parking, visitor management (gatehouse), common-area reservations, and billing view. Not multi-tenant — one deployment per condominium.
 
 ## Repository layout
 

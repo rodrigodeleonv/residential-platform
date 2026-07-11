@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Residential Platform: a condominium/residential management SaaS (single deployment per condominium, not multi-tenant, ~400 users). Monorepo:
+Residential Platform: a condominium/residential management SaaS (single deployment per condominium, not multi-tenant, a few hundred users). Monorepo:
 
 - `apps/api` — Python 3.14+ / FastAPI backend, managed with `uv`. PostgreSQL is the database.
 - `apps/web` — React + TypeScript frontend (not scaffolded yet).
@@ -16,7 +16,7 @@ Residential Platform: a condominium/residential management SaaS (single deployme
 - All code, comments, docs, commit messages, and identifiers in English (requirements doc stays in Spanish).
 - TypeScript whenever possible on the frontend — no plain JS.
 - Do not add Claude as co-author in git commits.
-- Avoid over-engineering; prefer the simple design. Scale target is small (~400 users).
+- Avoid over-engineering; prefer the simple design. Scale target is small (a few hundred users).
 - All API endpoints go under the `/api/v0/` prefix (version bumps only on breaking changes).
 - Every feature is completed together with tests that validate it (pytest on the backend; Vitest/Playwright on the frontend once it exists).
 - **All tests must pass before every commit** (`uv run pytest` from `apps/api/`).

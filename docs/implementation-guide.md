@@ -23,7 +23,7 @@ apps/api/
 │   └── modules/
 │       ├── auth/             # login codes, magic links, sessions, current-user deps
 │       ├── users/            # accounts, role assignments, onboarding/invitations
-│       ├── units/            # towers, floors, units, houses, ownership, tenancy
+│       ├── units/            # buildings, floors, units, houses, ownership, tenancy
 │       ├── vehicles/         # vehicle registry, parking spots
 │       ├── visitors/         # pre-registrations, gatehouse flows, entry/exit log
 │       ├── reservations/     # reservable areas, bookings
@@ -54,7 +54,7 @@ Rules of thumb:
 
 - **API prefix**: every router is mounted under `/api/v0` (single constant in `main.py`). Route paths inside modules are written without the prefix.
 - **Resource naming**: plural nouns, kebab-free (`/api/v0/units/{unit_id}/vehicles`).
-- **Primary keys**: integer autoincrement. Single deployment, ~400 users — UUIDs add nothing here.
+- **Primary keys**: integer autoincrement. Single deployment, a few hundred users — UUIDs add nothing here.
 - **Timestamps**: `created_at` / `updated_at`, timezone-aware UTC (`TIMESTAMPTZ`). All server logic in UTC; the frontend localizes.
 - **Errors**: raise `HTTPException` from routers; services raise small domain exceptions (e.g. `NotFoundError`, `PermissionDeniedError`) translated to HTTP codes by shared exception handlers in `main.py`.
 - **Datetimes in APIs**: ISO 8601 with offset.
@@ -144,6 +144,6 @@ Anti-over-engineering list — revisit only when a real need appears:
 - No repository/unit-of-work pattern, no CQRS, no event bus.
 - No background job runner (tenancy expiry is checked at request time; log retention can be a manual/cron SQL cleanup).
 - No JWT/OAuth — first-party cookie sessions only.
-- No multi-tenancy, no horizontal scaling concerns (~400 users).
+- No multi-tenancy, no horizontal scaling concerns (a few hundred users).
 - No real email provider until the console mock stops being enough.
 - No payment gateway — billing stays view-only with manual mark-as-paid.
