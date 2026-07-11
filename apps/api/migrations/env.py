@@ -10,7 +10,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 import app.modules.audit.models
 import app.modules.auth.models
 import app.modules.units.models
-import app.modules.users.models  # noqa: F401
+import app.modules.users.models
+import app.modules.vehicles.models  # noqa: F401
 from app.config import get_settings
 from app.models import Base
 

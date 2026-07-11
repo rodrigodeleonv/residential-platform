@@ -82,9 +82,10 @@ Each phase ends with working, tested, deployable software.
 - [x] Enforce the owners-XOR-tenants occupancy rule (derived occupancy, see §3)
 - [x] Audit: owner/tenant updates (owner_assigned/removed, tenant_registered/updated/revoked)
 
-### Phase 3 — Vehicles & parking
-- 2 fixed parking spots per unit, spot numbers
-- Vehicle registry per unit (plate, more than 2 allowed)
+### Phase 3 — Vehicles & parking (done)
+- [x] Fixed number of assigned parking spots per unit (limit configurable via settings), spot numbers unique condo-wide
+- [x] Vehicle registry per unit: normalized unique plates; more vehicles than spots allowed
+- [x] Resident-only registration enforced (a non-resident owner cannot register vehicles); unit members view, admin overrides
 
 ### Phase 4 — Frontend foundation
 - Prerequisite: install Node.js LTS (nothing frontend-related is installed on the dev machine yet; npm ships with Node — deliberately deferred until this phase)

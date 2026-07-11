@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     session_ttl_days: int = 30
     login_code_ttl_minutes: int = 10
     login_code_max_attempts: int = 5
+    parking_spots_per_unit: int = (
+        2  # fixed assigned spots per unit (deployment-specific)
+    )
 
 
 @lru_cache
