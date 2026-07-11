@@ -70,4 +70,6 @@ class RoleAssignment(Base):
     starts_on: Mapped[date | None]
     ends_on: Mapped[date | None]
 
-    user: Mapped[User] = relationship(back_populates="role_assignments", lazy="selectin")
+    user: Mapped[User] = relationship(
+        back_populates="role_assignments", lazy="selectin"
+    )
