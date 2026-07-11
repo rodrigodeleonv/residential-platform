@@ -1,8 +1,20 @@
 from datetime import datetime
+from enum import StrEnum
 from typing import Any, ClassVar
 
-from sqlalchemy import DateTime, MetaData, func
+from sqlalchemy import DateTime, Enum, MetaData, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+
+def str_enum(enum_type: type[StrEnum], name: str) -> Enum:
+    """VARCHAR + CHECK enum storing member values (easier to evolve than native enums)."""
+    return Enum(
+        enum_type,
+        name=name,
+        native_enum=False,
+        values_callable=lambda e: [member.value for member in e],
+    )
+
 
 # Stable constraint names so Alembic autogenerate produces deterministic migrations.
 NAMING_CONVENTION = {

@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 # Import every module's models so autogenerate sees the full metadata.
 import app.modules.audit.models
 import app.modules.auth.models
+import app.modules.units.models
 import app.modules.users.models  # noqa: F401
 from app.config import get_settings
 from app.models import Base

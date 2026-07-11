@@ -23,6 +23,7 @@ from app.main import create_app
 from app.modules.auth.deps import SESSION_COOKIE
 from app.modules.auth.models import AuthSession
 from app.modules.auth.service import hash_token
+from app.modules.units.models import Building, Unit, UnitKind
 from app.modules.users.models import Role, RoleAssignment, User
 
 API_DIR = Path(__file__).parent.parent
@@ -31,6 +32,8 @@ TEST_DB_NAME = "residential_test"
 
 type UserFactory = Callable[..., Awaitable[User]]
 type LoginAs = Callable[[User], Awaitable[None]]
+type UnitFactory = Callable[..., Awaitable[Unit]]
+type RoleGranter = Callable[..., Awaitable[RoleAssignment]]
 
 
 @pytest.fixture(scope="session")
@@ -142,6 +145,45 @@ def create_user(db_session: AsyncSession) -> UserFactory:
         return user
 
     return _create
+
+
+@pytest.fixture
+def create_unit(db_session: AsyncSession) -> UnitFactory:
+    async def _create(
+        number: str = "H-1",
+        *,
+        building: Building | None = None,
+        floor: int | None = None,
+    ) -> Unit:
+        unit = Unit(
+            kind=UnitKind.APARTMENT if building else UnitKind.HOUSE,
+            building_id=building.id if building else None,
+            floor=floor,
+            number=number,
+        )
+        db_session.add(unit)
+        await db_session.flush()
+        return unit
+
+    return _create
+
+
+@pytest.fixture
+def grant_role(db_session: AsyncSession) -> RoleGranter:
+    """Assign a role directly in the database (test setup shortcut)."""
+
+    async def _grant(
+        user: User, role: Role, unit: Unit | None = None, **dates: object
+    ) -> RoleAssignment:
+        assignment = RoleAssignment(
+            user_id=user.id, role=role, unit_id=unit.id if unit else None, **dates
+        )
+        db_session.add(assignment)
+        await db_session.flush()
+        db_session.expire(user, ["role_assignments"])
+        return assignment
+
+    return _grant
 
 
 @pytest.fixture

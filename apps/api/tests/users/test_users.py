@@ -114,6 +114,19 @@ async def test_non_admin_cannot_create_users(
     assert response.status_code == 403
 
 
+async def test_scoped_roles_cannot_be_assigned_directly(
+    client: AsyncClient, create_user: UserFactory, login_as: LoginAs
+) -> None:
+    await login_as(await create_user("admin@example.com", Role.ADMIN))
+
+    response = await client.post(
+        f"{API}/users",
+        json={"email": "o@example.com", "full_name": "O", "roles": ["owner"]},
+    )
+
+    assert response.status_code == 422
+
+
 async def test_anonymous_cannot_create_users(client: AsyncClient) -> None:
     response = await client.post(
         f"{API}/users", json={"email": "x@example.com", "full_name": "X"}

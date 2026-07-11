@@ -31,6 +31,11 @@ async def create_user(
         raise HTTPException(
             status_code=409, detail="Email already registered"
         ) from None
+    except service.InvalidRoles:
+        raise HTTPException(
+            status_code=422,
+            detail="Only admin/guard can be assigned directly; owner/tenant are granted via units",
+        ) from None
     return UserRead.model_validate(user)
 
 

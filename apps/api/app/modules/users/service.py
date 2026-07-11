@@ -5,11 +5,17 @@ from app.config import Settings
 from app.email import EmailProvider
 from app.modules.audit import service as audit
 from app.modules.auth import service as auth
-from app.modules.users.models import RoleAssignment, User
+from app.modules.users.models import Role, RoleAssignment, User
 from app.modules.users.schemas import UserCreate
+
+UNSCOPED_ROLES = {Role.ADMIN, Role.GUARD}
 
 
 class EmailAlreadyRegistered(Exception):
+    pass
+
+
+class InvalidRoles(Exception):
     pass
 
 
@@ -21,6 +27,8 @@ async def create_user(
     provider: EmailProvider,
     settings: Settings,
 ) -> User:
+    if not set(data.roles) <= UNSCOPED_ROLES:
+        raise InvalidRoles(data.roles)  # owner/tenant are granted through units
     email = data.email.lower()
     if await db.scalar(select(User.id).where(User.email == email)) is not None:
         raise EmailAlreadyRegistered(email)

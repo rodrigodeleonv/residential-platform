@@ -40,7 +40,7 @@ Guiding constraint from requirements: avoid over-engineering, prefer simplicity,
 - **Modular monolith**: one FastAPI app, code organized by domain module (`auth`, `users`, `units`, `vehicles`, `visitors`, `reservations`, `billing`, `audit`), not by technical layer across the whole app. Each module owns its routers, schemas, models, and service functions.
 - **Layers inside a module**: router (HTTP) → service (business rules) → SQLAlchemy models. No repository pattern — at this scale SQLAlchemy sessions in services are enough.
 - **Database**: PostgreSQL, SQLAlchemy 2.0 (async), Alembic for migrations.
-- **AuthZ**: role-based with unit-scoped checks (e.g. "is current user a resident of unit X?"). Roles are assignments, not user types, since one person can be admin + owner + resident.
+- **AuthZ**: role-based with unit-scoped checks (e.g. "is current user a resident of unit X?"). Roles are assignments, not user types, since one person can be admin + owner + resident. Owner/tenant assignments carry a unit scope, and tenants also carry the contract date range. Occupancy is **derived, not stored**: a unit with an active tenancy is tenant-occupied, otherwise owner-occupied — this enforces the owners-XOR-tenants rule with no extra state, and tenancy expiry needs no background job (checked at authorization time).
 - **Sessions**: httpOnly cookie sessions (server-side) rather than JWT — simpler and revocable, fine for a single first-party web app.
 - **API versioning**: all backend endpoints live under the `/api/v0/` prefix. `v0` while the API is unstable/pre-release; bump to `v1`, `v2`, … only on breaking changes once stabilized.
 - **Frontend**: Vite + React + TypeScript SPA in `apps/web`, talking to the API. react-i18next for ES/EN. Responsive layout (multi-device = responsive web; no native app planned).
@@ -75,12 +75,12 @@ Each phase ends with working, tested, deployable software.
 - [x] Audit hooks for login/logout and account changes on other users
 - Owner creates/invites tenants: deferred to Phase 2 (needs units + ownership to scope the tenant role)
 
-### Phase 2 — Physical structure & occupancy
-- Buildings, floors, units, houses; visitor parking spots
-- Ownership (co-owners per unit) and tenancy (date-ranged, auto-expiry of access)
-- Owner flows: register/extend/revoke tenant; admin override flows
-- Enforce the owners-XOR-tenants occupancy rule
-- Audit: owner/tenant updates
+### Phase 2 — Physical structure & occupancy (done)
+- [x] Buildings, floors, units, houses; visitor parking spots
+- [x] Ownership (co-owners per unit) and tenancy (date-ranged; expiry enforced at authorization time)
+- [x] Owner flows: register/extend/revoke tenant (any single co-owner); admin override flows; owner invites tenant accounts (the item deferred from Phase 1)
+- [x] Enforce the owners-XOR-tenants occupancy rule (derived occupancy, see §3)
+- [x] Audit: owner/tenant updates (owner_assigned/removed, tenant_registered/updated/revoked)
 
 ### Phase 3 — Vehicles & parking
 - 2 fixed parking spots per unit, spot numbers
