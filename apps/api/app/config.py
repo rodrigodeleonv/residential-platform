@@ -10,7 +10,9 @@ class Settings(BaseSettings):
     )
 
     environment: Literal["local", "test", "production"] = "local"
-    database_url: str = "postgresql+asyncpg://residential:residential@localhost:5432/residential"
+    database_url: str = (
+        "postgresql+asyncpg://residential:residential@localhost:5432/residential"
+    )
 
 
 @lru_cache
