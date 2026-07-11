@@ -67,12 +67,13 @@ Each phase ends with working, tested, deployable software.
 - [x] pytest setup with a database fixture (test db + per-test transaction rollback)
 - [ ] GitHub Actions CI (lint + typecheck + tests) — deferred until the GitHub repo is set up
 
-### Phase 1 — Users, roles, passwordless auth
-- User model, role assignments (admin / owner / tenant / guard)
-- Email OTP + magic-link login, cookie sessions, logout
-- Email abstraction with console/mock provider (real provider later, behind the same interface)
-- Onboarding: admin creates accounts or sends email invitations (residents, admins, guards); owner creates/invites tenants
-- Audit hooks for login/logout and account changes on other users
+### Phase 1 — Users, roles, passwordless auth (done)
+- [x] User model, role assignments (admin / owner / tenant / guard)
+- [x] Email OTP + magic-link login, cookie sessions, logout
+- [x] Email abstraction with console/mock provider (real provider later, behind the same interface)
+- [x] Onboarding: admin creates accounts or sends email invitations; first admin via `python -m app.bootstrap`
+- [x] Audit hooks for login/logout and account changes on other users
+- Owner creates/invites tenants: deferred to Phase 2 (needs units + ownership to scope the tenant role)
 
 ### Phase 2 — Physical structure & occupancy
 - Buildings, floors, units, houses; visitor parking spots

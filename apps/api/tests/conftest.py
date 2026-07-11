@@ -1,6 +1,8 @@
 import os
+import secrets
 import subprocess
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Awaitable, Callable
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -16,11 +18,19 @@ from sqlalchemy.ext.asyncio import (
 
 from app.config import Settings
 from app.db import get_session
+from app.email import EmailMessage, get_email_provider
 from app.main import create_app
+from app.modules.auth.deps import SESSION_COOKIE
+from app.modules.auth.models import AuthSession
+from app.modules.auth.service import hash_token
+from app.modules.users.models import Role, RoleAssignment, User
 
 API_DIR = Path(__file__).parent.parent
 POSTGRES_URL = "postgresql+asyncpg://residential:residential@localhost:5432"
 TEST_DB_NAME = "residential_test"
+
+type UserFactory = Callable[..., Awaitable[User]]
+type LoginAs = Callable[[User], Awaitable[None]]
 
 
 @pytest.fixture(scope="session")
@@ -83,10 +93,28 @@ async def db_session(engine: AsyncEngine) -> AsyncIterator[AsyncSession]:
         await transaction.rollback()
 
 
+class RecordingEmailProvider:
+    """Test double: captures outgoing emails instead of sending them."""
+
+    def __init__(self) -> None:
+        self.messages: list[EmailMessage] = []
+
+    async def send(self, message: EmailMessage) -> None:
+        self.messages.append(message)
+
+
 @pytest.fixture
-def app(settings: Settings, db_session: AsyncSession) -> FastAPI:
+def email_outbox() -> RecordingEmailProvider:
+    return RecordingEmailProvider()
+
+
+@pytest.fixture
+def app(
+    settings: Settings, db_session: AsyncSession, email_outbox: RecordingEmailProvider
+) -> FastAPI:
     app = create_app(settings)
     app.dependency_overrides[get_session] = lambda: db_session
+    app.dependency_overrides[get_email_provider] = lambda: email_outbox
     return app
 
 
@@ -96,3 +124,40 @@ async def client(app: FastAPI) -> AsyncIterator[AsyncClient]:
         transport=ASGITransport(app=app), base_url="http://test"
     ) as client:
         yield client
+
+
+@pytest.fixture
+def create_user(db_session: AsyncSession) -> UserFactory:
+    async def _create(
+        email: str, *roles: Role, full_name: str = "Test User", is_active: bool = True
+    ) -> User:
+        user = User(
+            email=email,
+            full_name=full_name,
+            is_active=is_active,
+            role_assignments=[RoleAssignment(role=role) for role in roles],
+        )
+        db_session.add(user)
+        await db_session.flush()
+        return user
+
+    return _create
+
+
+@pytest.fixture
+def login_as(client: AsyncClient, db_session: AsyncSession) -> LoginAs:
+    """Authenticate the test client as the given user (session created directly in db)."""
+
+    async def _login(user: User) -> None:
+        token = secrets.token_urlsafe(32)
+        db_session.add(
+            AuthSession(
+                user_id=user.id,
+                token_hash=hash_token(token),
+                expires_at=datetime.now(UTC) + timedelta(days=1),
+            )
+        )
+        await db_session.flush()
+        client.cookies.set(SESSION_COOKIE, token)
+
+    return _login

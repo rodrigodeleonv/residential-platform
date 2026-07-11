@@ -5,9 +5,10 @@ from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app import health
-from app.config import Settings, get_settings
-
-API_PREFIX = "/api/v0"
+from app.config import API_PREFIX, Settings, get_settings
+from app.email import create_email_provider
+from app.modules.auth.router import router as auth_router
+from app.modules.users.router import router as users_router
 
 
 @asynccontextmanager
@@ -23,7 +24,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 def create_app(settings: Settings | None = None) -> FastAPI:
     app = FastAPI(title="Residential Platform API", lifespan=lifespan)
     app.state.settings = settings or get_settings()
-    app.include_router(health.router, prefix=API_PREFIX)
+    app.state.email_provider = create_email_provider(app.state.settings)
+    for router in (health.router, auth_router, users_router):
+        app.include_router(router, prefix=API_PREFIX)
     return app
 
 
