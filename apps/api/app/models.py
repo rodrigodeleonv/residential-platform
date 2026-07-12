@@ -1,8 +1,9 @@
 from datetime import datetime
+from decimal import Decimal
 from enum import StrEnum
 from typing import Any, ClassVar
 
-from sqlalchemy import DateTime, Enum, MetaData, func
+from sqlalchemy import DateTime, Enum, MetaData, Numeric, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -28,7 +29,10 @@ NAMING_CONVENTION = {
 
 class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
-    type_annotation_map: ClassVar[dict[Any, Any]] = {datetime: DateTime(timezone=True)}
+    type_annotation_map: ClassVar[dict[Any, Any]] = {
+        datetime: DateTime(timezone=True),
+        Decimal: Numeric(10, 2),  # money columns (fees, charges)
+    }
 
 
 class TimestampMixin:

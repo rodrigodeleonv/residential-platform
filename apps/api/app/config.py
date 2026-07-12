@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     login_code_ttl_minutes: int = 10
     login_code_max_attempts: int = 5
     # Deployment-specific policy values: generic defaults here, real values via env.
+    currency: Literal["GTQ", "USD"] = "GTQ"  # currency for fees and charges
     parking_spots_per_unit: int = 2
     local_timezone: str = "UTC"  # used to evaluate recurring visit windows
     visit_expiration_hours_options: tuple[int, ...] = (1, 2, 4)

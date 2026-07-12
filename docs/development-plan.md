@@ -23,6 +23,7 @@ Core modules: passwordless auth, units & occupancy, vehicles & parking, visitor 
 - **Visitor entry log**: entry AND exit are recorded, along with the assigned visitor parking spot (a physical marker with the spot number goes on the vehicle). Records are kept for a defined retention period.
 - **Billing**: view-only. Pending debts (maintenance fee, common-area reservations, fines) and history of records manually marked as paid. Fines are issued by admins from a catalog of infraction types. No payment gateway integration for now; design so a provider abstraction can be added later.
 - **Reservable areas**: a module where admins define areas with intrinsic attributes (e.g. parallel-booking capacity). Areas are condominium-wide (not per building/zone). The initial catalog and capacities come from the private requirements document.
+- **Reservations**: every area has a per-slot fee — free areas simply have fee 0 — in a configurable currency (setting, default per deployment). Bookings use fixed daily time slots (morning 06–12, afternoon 12–18, evening 18–24); one person may book all slots of a day, no per-person limit. The fee is snapshotted onto the reservation at booking time (for billing). Cancellation is allowed until the slot starts (soft-cancel, keeps the trail); admins can cancel anytime.
 - **Auth**: passwordless — email verification code and/or magic link.
 - **Email**: provider-independent abstraction; initially a mock provider that prints to the console (no real email protocol).
 - **i18n**: Spanish and English.
@@ -100,10 +101,11 @@ Each phase ends with working, tested, deployable software.
 - [x] Entry/exit log with visitor parking spot (marker) — spot busy while the visit is open; retention via settings + purge routine (cron/manual)
 - [x] Audit: preregistration_created/updated/canceled, visitor_entry with who authorized
 
-### Phase 6 — Common-area reservations
-- Reservable-areas module: admin-managed catalog with intrinsic attributes (parallel-booking capacity)
-- Seed the initial area catalog (names and capacities from the requirements doc)
-- Resident booking flow with capacity-aware conflict prevention; cancellation
+### Phase 6 — Common-area reservations (done)
+- [x] Reservable-areas module: admin-managed catalog (name, parallel-booking capacity, per-slot fee; currency configurable via settings)
+- [x] Resident booking by fixed daily time slots with capacity-aware conflict prevention; availability per day; fee snapshot for billing
+- [x] Cancellation until slot start by the creator (soft-cancel); admin can cancel anytime; admin overview of all reservations
+- The initial area catalog is admin-created data (names/capacities in the private requirements doc) — deliberately not seeded in code
 
 ### Phase 7 — Billing (view-only)
 - Charge records per unit: maintenance fees, reservation charges, fines
@@ -119,5 +121,4 @@ Each phase ends with working, tested, deployable software.
 ## 6. Open questions
 
 1. **Market comparison**: research commercial condominium-management / gatehouse platforms to identify key features worth adopting — pending, can run anytime.
-2. **Reservation details** (Phase 6): booking time granularity (hourly? full-day?), cancellation policy, and whether any area has a cost — to be defined when the phase starts.
-3. **Audit retention & visibility** (Phase 5+): scope is defined; still open — how long audit records are kept and who can view them (admins only?).
+2. **Audit retention & visibility** (Phase 5+): scope is defined; still open — how long audit records are kept and who can view them (admins only?).
