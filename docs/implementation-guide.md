@@ -65,7 +65,7 @@ Rules of thumb:
 
 `app/config.py` with `pydantic-settings`:
 
-- `Settings` class reading env vars (prefix `APP_`), with a `.env` file for local dev (gitignored; keep `.env.example` tracked).
+- `Settings` class reading env vars (prefix `APP_`), with a `.env` file for local dev (gitignored; keep `example.env` tracked).
 - Minimum settings: `database_url`, `environment` (`local`/`production`), `session_ttl`, `email_provider` (`console` for now), cookie security flags.
 - The app factory takes an optional `Settings` so tests can inject their own.
 
