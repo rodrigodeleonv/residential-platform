@@ -94,11 +94,11 @@ Each phase ends with working, tested, deployable software.
 - App shell with role-aware navigation (admin area vs resident area)
 - Admin UI + resident UI for phases 1–3 features
 
-### Phase 5 — Visitors & gatehouse
-- Pre-registration by residents: date + time + expiration window, capped advance booking, one-off or recurring over a bounded range (values per the requirements doc)
-- Gatehouse screen for guards: lookup, restricted resident data view, flow A (live call result recorded) and flow B (valid pre-registration within window)
-- Entry/exit log with assigned visitor parking spot; retention per the requirements doc
-- Audit: pre-registration creation/modification, who authorized each entry
+### Phase 5 — Visitors & gatehouse (done)
+- [x] Pre-registration by residents: one-off (start + expiration window) or recurring (weekday + time over a bounded range); policy limits (expiration options, advance cap, range cap) configurable via settings
+- [x] Gatehouse for guards: restricted unit card (actual residents + phones, plates, spot numbers), active pre-registrations computed per window, flow A (resident approves live, validated as actual resident) and flow B (valid pre-registration)
+- [x] Entry/exit log with visitor parking spot (marker) — spot busy while the visit is open; retention via settings + purge routine (cron/manual)
+- [x] Audit: preregistration_created/updated/canceled, visitor_entry with who authorized
 
 ### Phase 6 — Common-area reservations
 - Reservable-areas module: admin-managed catalog with intrinsic attributes (parallel-booking capacity)

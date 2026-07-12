@@ -11,6 +11,7 @@ from app.modules.auth.router import router as auth_router
 from app.modules.units.router import router as units_router
 from app.modules.users.router import router as users_router
 from app.modules.vehicles.router import router as vehicles_router
+from app.modules.visitors.router import router as visitors_router
 
 
 @asynccontextmanager
@@ -33,6 +34,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         users_router,
         units_router,
         vehicles_router,
+        visitors_router,
     ):
         app.include_router(router, prefix=API_PREFIX)
     return app

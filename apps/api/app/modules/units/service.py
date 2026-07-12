@@ -189,6 +189,17 @@ async def active_tenancies(
     )
 
 
+async def residents_of(
+    db: AsyncSession, unit: Unit, on: date | None = None
+) -> list[User]:
+    """The responsible persons who actually occupy the unit right now."""
+    on = on or date.today()
+    tenancies = await active_tenancies(db, unit.id, on)
+    if tenancies:
+        return [tenancy.user for tenancy in tenancies]
+    return await owners_of(db, unit)
+
+
 async def is_resident(
     db: AsyncSession, user_id: int, unit_id: int, on: date | None = None
 ) -> bool:

@@ -21,9 +21,13 @@ class Settings(BaseSettings):
     session_ttl_days: int = 30
     login_code_ttl_minutes: int = 10
     login_code_max_attempts: int = 5
-    parking_spots_per_unit: int = (
-        2  # fixed assigned spots per unit (deployment-specific)
-    )
+    # Deployment-specific policy values: generic defaults here, real values via env.
+    parking_spots_per_unit: int = 2
+    local_timezone: str = "UTC"  # used to evaluate recurring visit windows
+    visit_expiration_hours_options: tuple[int, ...] = (1, 2, 4)
+    visit_max_advance_days: int = 30
+    visit_recurring_max_days: int = 366
+    visit_log_retention_days: int = 365
 
 
 @lru_cache

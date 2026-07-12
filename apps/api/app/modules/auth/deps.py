@@ -30,3 +30,13 @@ async def get_current_admin(user: CurrentUser) -> User:
 
 
 AdminUser = Annotated[User, Depends(get_current_admin)]
+
+
+async def get_current_guard(user: CurrentUser) -> User:
+    """Gatehouse access: guards, plus admins (guards operate under their control)."""
+    if not user.roles & {Role.GUARD, Role.ADMIN}:
+        raise HTTPException(status_code=403, detail="Guard role required")
+    return user
+
+
+GuardUser = Annotated[User, Depends(get_current_guard)]
