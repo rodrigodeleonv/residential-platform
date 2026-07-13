@@ -8,6 +8,7 @@ from app import health
 from app.config import API_PREFIX, Settings, get_settings
 from app.email import create_email_provider
 from app.modules.auth.router import router as auth_router
+from app.modules.billing.router import router as billing_router
 from app.modules.reservations.router import router as reservations_router
 from app.modules.units.router import router as units_router
 from app.modules.users.router import router as users_router
@@ -37,6 +38,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         vehicles_router,
         visitors_router,
         reservations_router,
+        billing_router,
     ):
         app.include_router(router, prefix=API_PREFIX)
     return app

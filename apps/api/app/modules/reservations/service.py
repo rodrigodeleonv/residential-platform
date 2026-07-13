@@ -5,6 +5,7 @@ from sqlalchemy import ColumnElement, and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import Settings
+from app.modules.billing import service as billing_service
 from app.modules.reservations.models import ReservableArea, Reservation, TimeSlot
 from app.modules.reservations.schemas import AreaCreate, AreaUpdate, ReservationCreate
 from app.modules.units.models import Unit
@@ -162,6 +163,7 @@ async def create_reservation(
     )
     db.add(reservation)
     await db.flush()
+    await billing_service.create_reservation_charge(db, reservation, area)
     return reservation
 
 
@@ -195,3 +197,4 @@ async def cancel_reservation(
         raise CancelWindowClosed
     reservation.canceled_at = datetime.now(UTC)
     await db.flush()
+    await billing_service.void_reservation_charge(db, reservation)

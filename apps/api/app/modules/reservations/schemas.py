@@ -1,10 +1,10 @@
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Self
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 
 from app.modules.reservations.models import TimeSlot
+from app.schemas import MoneyRead
 
 
 class AreaCreate(BaseModel):
@@ -22,21 +22,7 @@ class AreaUpdate(BaseModel):
     is_active: bool | None = None
 
 
-class _MoneyRead(BaseModel):
-    """Read schema whose amounts carry the deployment-wide currency."""
-
-    model_config = ConfigDict(from_attributes=True)
-
-    currency: str = ""
-
-    @classmethod
-    def of(cls, obj: object, currency: str) -> Self:
-        read = cls.model_validate(obj)
-        read.currency = currency
-        return read
-
-
-class AreaRead(_MoneyRead):
+class AreaRead(MoneyRead):
     id: int
     name: str
     description: str | None
@@ -58,7 +44,7 @@ class ReservationCreate(BaseModel):
     slot: TimeSlot
 
 
-class ReservationRead(_MoneyRead):
+class ReservationRead(MoneyRead):
     id: int
     area_id: int
     unit_id: int

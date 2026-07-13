@@ -21,7 +21,7 @@ Core modules: passwordless auth, units & occupancy, vehicles & parking, visitor 
 - **Gatehouse**: guards see a restricted data subset (responsible resident name, contact phone, vehicle plate, building/house, unit number, assigned parking number). Two entry flows: (A) no pre-registration — guard phones the resident, who approves/denies live; (B) pre-registration — guard sees a valid pre-registration within its time window and lets the visitor in without a call.
 - **Visitor pre-registration**: resident picks date, time, and one of a fixed set of expiration windows. The guard only sees the pre-registration within that window. Advance booking is capped, and pre-registrations can be one-off or recurring (by day/time/expiration) over a bounded range.
 - **Visitor entry log**: entry AND exit are recorded, along with the assigned visitor parking spot (a physical marker with the spot number goes on the vehicle). Records are kept for a defined retention period.
-- **Billing**: view-only. Pending debts (maintenance fee, common-area reservations, fines) and history of records manually marked as paid. Fines are issued by admins from a catalog of infraction types. No payment gateway integration for now; design so a provider abstraction can be added later.
+- **Billing**: view-only. Pending debts (maintenance fee, common-area reservations, fines) and history of records manually marked as paid. Fines are issued by admins from a catalog of infraction types — name and amount are snapshotted onto the charge at issue time. Reservation charges are created automatically at booking (from the fee snapshot; free areas produce no charge) and voided if the reservation is canceled while unpaid — a paid charge is kept (refunds are handled outside the platform). No payment gateway integration for now; design so a provider abstraction can be added later.
 - **Reservable areas**: a module where admins define areas with intrinsic attributes (e.g. parallel-booking capacity). Areas are condominium-wide (not per building/zone). The initial catalog and capacities come from the private requirements document.
 - **Reservations**: every area has a per-slot fee — free areas simply have fee 0 — in a configurable currency (setting, default per deployment). Bookings use fixed daily time slots (morning 06–12, afternoon 12–18, evening 18–24); one person may book all slots of a day, no per-person limit. The fee is snapshotted onto the reservation at booking time (for billing). Cancellation is allowed until the slot starts (soft-cancel, keeps the trail); admins can cancel anytime.
 - **Auth**: passwordless — email verification code and/or magic link.
@@ -107,11 +107,11 @@ Each phase ends with working, tested, deployable software.
 - [x] Cancellation until slot start by the creator (soft-cancel); admin can cancel anytime; admin overview of all reservations
 - The initial area catalog is admin-created data (names/capacities in the private requirements doc) — deliberately not seeded in code
 
-### Phase 7 — Billing (view-only)
-- Charge records per unit: maintenance fees, reservation charges, fines
-- Infraction catalog; admin issues fines from it
-- Owner view: pending debts + paid history; admin marks records as paid
-- Model money/concepts so a payment-provider abstraction can plug in later
+### Phase 7 — Billing (view-only) (done)
+- [x] Charge records per unit: maintenance fees, reservation charges (auto-created at booking, voided on unpaid cancellation), fines
+- [x] Infraction catalog; admin issues fines from it (name/amount snapshotted)
+- [x] Owner view: unit statement with pending debts + total + paid history (owner or admin only — tenants excluded); admin marks records as paid and has a filterable overview of all charges
+- [x] Model money/concepts so a payment-provider abstraction can plug in later (charge records with paid/voided lifecycle; currency from settings)
 
 ### Phase 8 — Hardening & e2e
 - Playwright e2e suites for the critical flows
