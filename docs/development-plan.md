@@ -45,6 +45,7 @@ Guiding constraint from requirements: avoid over-engineering, prefer simplicity,
 - **Sessions**: httpOnly cookie sessions (server-side) rather than JWT — simpler and revocable, fine for a single first-party web app.
 - **API versioning**: all backend endpoints live under the `/api/v0/` prefix. `v0` while the API is unstable/pre-release; bump to `v1`, `v2`, … only on breaking changes once stabilized.
 - **Frontend**: Vite + React + TypeScript SPA in `apps/web`, talking to the API. react-i18next for ES/EN. Responsive layout (multi-device = responsive web; no native app planned).
+- **Frontend package manager**: pnpm, chosen for its supply-chain protections after the 2025 npm postinstall worms (Shai-Hulud & co.): dependency lifecycle scripts are never executed (pnpm v10+ default), new versions are quarantined for 24h (`minimumReleaseAge`), versions are pinned exactly (no `^` ranges), and transitive deps must come from the registry (`blockExoticSubdeps`). Settings live in `apps/web/pnpm-workspace.yaml`.
 - **Frontend testing**: Vitest + React Testing Library (unit), Playwright (e2e). Backend: pytest + httpx test client.
 - **Deployment**: Docker Compose (api, web, postgres). Must run both in the cloud and locally/on-premises.
 - **CI**: GitHub Actions (lint, typecheck, tests).
@@ -88,12 +89,13 @@ Each phase ends with working, tested, deployable software.
 - [x] Vehicle registry per unit: normalized unique plates; more vehicles than spots allowed
 - [x] Resident-only registration enforced (a non-resident owner cannot register vehicles); unit members view, admin overrides
 
-### Phase 4 — Frontend foundation
-- Prerequisite: install Node.js LTS (nothing frontend-related is installed on the dev machine yet; npm ships with Node — deliberately deferred until this phase)
-- Scaffold `apps/web` (Vite + React + TS), i18n ES/EN from day one
-- Auth screens (email → code/link), session handling
-- App shell with role-aware navigation (admin area vs resident area)
-- Admin UI + resident UI for phases 1–3 features
+### Phase 4 — Frontend foundation (in progress)
+- [x] Prerequisite: Node.js LTS installed (nvm + Node 24), pnpm as package manager (see §3 supply-chain note)
+- [x] Scaffold `apps/web` (Vite + React + TS), i18n ES/EN from day one
+- [x] Auth screens (email → code), session handling (httpOnly cookie, `/users/me` on load)
+- [x] App shell with role-aware navigation + first admin page (users list) proving the pattern
+- [ ] Admin UI + resident UI for the remaining backend features (units, vehicles, visitors, reservations, billing, gatehouse)
+- [ ] Magic-link landing: redirect to the SPA after the API sets the session cookie (small backend tweak; today the link answers with JSON)
 
 ### Phase 5 — Visitors & gatehouse (done)
 - [x] Pre-registration by residents: one-off (start + expiration window) or recurring (weekday + time over a bounded range); policy limits (expiration options, advance cap, range cap) configurable via settings

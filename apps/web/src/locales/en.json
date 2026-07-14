@@ -1,0 +1,45 @@
+{
+  "app": {
+    "title": "Residential Platform"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong, try again",
+    "logout": "Log out"
+  },
+  "nav": {
+    "home": "Home",
+    "users": "Users"
+  },
+  "login": {
+    "title": "Sign in",
+    "emailLabel": "Email",
+    "sendCode": "Send code",
+    "codeSent": "If the email is registered, a login code was sent.",
+    "codeLabel": "Login code",
+    "verify": "Sign in",
+    "changeEmail": "Use another email",
+    "invalidCode": "Invalid or expired code",
+    "tooManyAttempts": "Too many attempts, try again later"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}",
+    "rolesTitle": "Your roles"
+  },
+  "roles": {
+    "admin": "Administration",
+    "owner": "Owner",
+    "tenant": "Tenant",
+    "guard": "Gatehouse"
+  },
+  "users": {
+    "title": "Users",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "roles": "Roles",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive"
+  }
+}

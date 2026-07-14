@@ -1,0 +1,5 @@
+# Supply-chain hardening. pnpm v10+ already refuses to run dependency
+# lifecycle scripts (postinstall & co.) unless allowlisted via allowBuilds.
+minimumReleaseAge: 1440 # don't install versions younger than 24h
+blockExoticSubdeps: true # transitive deps must come from the registry, not git/tarball URLs
+savePrefix: "" # pin exact versions in package.json (no ^ ranges)

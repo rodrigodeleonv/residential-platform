@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Residential Platform: a condominium/residential management SaaS (single deployment per condominium, not multi-tenant, a few hundred users). Monorepo:
 
 - `apps/api` — Python 3.14+ / FastAPI backend, managed with `uv`. PostgreSQL is the database.
-- `apps/web` — React + TypeScript frontend (not scaffolded yet).
+- `apps/web` — React + TypeScript frontend (Vite), managed with `pnpm`.
 - `docs/development-plan.md` — the development plan and architecture decisions. Read it before starting feature work.
 - `requeriments.md` — business requirements (in Spanish). **Gitignored on purpose and never tracked. Always ask the user for permission before modifying it.**
 
@@ -19,7 +19,7 @@ Residential Platform: a condominium/residential management SaaS (single deployme
 - Avoid over-engineering; prefer the simple design. Scale target is small (a few hundred users).
 - All API endpoints go under the `/api/v0/` prefix (version bumps only on breaking changes).
 - Every feature is completed together with tests that validate it (pytest on the backend; Vitest/Playwright on the frontend once it exists).
-- **All tests must pass before every commit** (`uv run pytest` from `apps/api/`).
+- **All tests must pass before every commit** (`uv run pytest` from `apps/api/`; `pnpm test` from `apps/web/`).
 - Code style: readable and human-friendly over verbose; modern syntax; full type annotations except where impractical; prefer comprehensions / `functools` / `itertools` when they aid clarity. Balance readability with efficiency.
 - Infrastructure runs in Docker, never installed on the host OS: PostgreSQL always via `docker compose up -d postgres` (root `docker-compose.yml`).
 
@@ -33,3 +33,15 @@ Residential Platform: a condominium/residential management SaaS (single deployme
 - `uv run uvicorn app.main:app --reload` — run the API locally
 
 Add dependencies with `uv add <pkg>` (or `uv add --dev <pkg>`), never by editing `pyproject.toml` by hand.
+
+## Commands (frontend, run from `apps/web/`)
+
+Node is installed via nvm, which only loads in interactive shells — run `source ~/.nvm/nvm.sh` first in scripts/non-interactive shells.
+
+- `pnpm install` — install/sync dependencies
+- `pnpm dev` — Vite dev server (proxies `/api` to `localhost:8000`)
+- `pnpm lint` / `pnpm typecheck` — eslint / tsc
+- `pnpm test` — Vitest
+- `pnpm build` — typecheck + production build
+
+Add dependencies with `pnpm add <pkg>` (or `pnpm add -D <pkg>`), never by editing `package.json` by hand. Supply-chain hardening (no lifecycle scripts, 24h `minimumReleaseAge`, exact version pins) is configured in `apps/web/pnpm-workspace.yaml` — never weaken it to work around an install issue.

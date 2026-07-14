@@ -15,10 +15,14 @@ web="${CLAUDE_PROJECT_DIR:-.}/apps/web"
 [ -f "$web/package.json" ] || exit 0
 cd "$web" || exit 0
 
+# Node is managed by nvm, which only loads in interactive shells.
+[ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+command -v pnpm >/dev/null 2>&1 || exit 0
+
 if jq -e '.scripts.lint' package.json >/dev/null 2>&1; then
-  out=$(npm run --silent lint 2>&1) || { printf 'lint failed:\n%s\n' "$out" >&2; exit 2; }
+  out=$(pnpm run --silent lint 2>&1) || { printf 'lint failed:\n%s\n' "$out" >&2; exit 2; }
 fi
 if jq -e '.scripts.typecheck' package.json >/dev/null 2>&1; then
-  out=$(npm run --silent typecheck 2>&1) || { printf 'typecheck failed:\n%s\n' "$out" >&2; exit 2; }
+  out=$(pnpm run --silent typecheck 2>&1) || { printf 'typecheck failed:\n%s\n' "$out" >&2; exit 2; }
 fi
 exit 0

@@ -1,0 +1,45 @@
+{
+  "app": {
+    "title": "Plataforma Residencial"
+  },
+  "common": {
+    "loading": "Cargando…",
+    "error": "Algo salió mal, intenta de nuevo",
+    "logout": "Cerrar sesión"
+  },
+  "nav": {
+    "home": "Inicio",
+    "users": "Usuarios"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "emailLabel": "Correo electrónico",
+    "sendCode": "Enviar código",
+    "codeSent": "Si el correo está registrado, se envió un código de acceso.",
+    "codeLabel": "Código de acceso",
+    "verify": "Entrar",
+    "changeEmail": "Usar otro correo",
+    "invalidCode": "Código inválido o expirado",
+    "tooManyAttempts": "Demasiados intentos, intenta más tarde"
+  },
+  "home": {
+    "greeting": "Hola, {{name}}",
+    "rolesTitle": "Tus roles"
+  },
+  "roles": {
+    "admin": "Administración",
+    "owner": "Propietario",
+    "tenant": "Inquilino",
+    "guard": "Garita"
+  },
+  "users": {
+    "title": "Usuarios",
+    "name": "Nombre",
+    "email": "Correo",
+    "phone": "Teléfono",
+    "roles": "Roles",
+    "status": "Estado",
+    "active": "Activo",
+    "inactive": "Inactivo"
+  }
+}
