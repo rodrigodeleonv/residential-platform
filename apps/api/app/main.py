@@ -14,6 +14,7 @@ from app.modules.units.router import router as units_router
 from app.modules.users.router import router as users_router
 from app.modules.vehicles.router import router as vehicles_router
 from app.modules.visitors.router import router as visitors_router
+from app.rate_limit import RateLimiter
 
 
 @asynccontextmanager
@@ -30,6 +31,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app = FastAPI(title="Residential Platform API", lifespan=lifespan)
     app.state.settings = settings or get_settings()
     app.state.email_provider = create_email_provider(app.state.settings)
+    app.state.auth_rate_limiter = RateLimiter(
+        limit=app.state.settings.auth_rate_limit_attempts,
+        window_seconds=app.state.settings.auth_rate_limit_window_minutes * 60,
+    )
     for router in (
         health.router,
         auth_router,

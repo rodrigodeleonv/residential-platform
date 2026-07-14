@@ -113,10 +113,10 @@ Each phase ends with working, tested, deployable software.
 - [x] Owner view: unit statement with pending debts + total + paid history (owner or admin only — tenants excluded); admin marks records as paid and has a filterable overview of all charges
 - [x] Model money/concepts so a payment-provider abstraction can plug in later (charge records with paid/voided lifecycle; currency from settings)
 
-### Phase 8 — Hardening & e2e
-- Playwright e2e suites for the critical flows
-- Security pass (authz review, rate limiting on auth endpoints)
-- Production deployment setup (cloud + local)
+### Phase 8 — Hardening & e2e (backend part done)
+- [x] Security pass: authz review of every endpoint (all routes behind session auth plus role/unit-scoped dependencies; only the auth flows and health are public) and rate limiting on the login endpoints (per client IP per endpoint, in-process sliding window, limits via settings)
+- [x] Production deployment setup (`docker-compose.prod.yml` + `docs/deployment.md`): migrations on start, local-only api port behind a TLS reverse proxy, secrets via untracked env files, backup routine
+- Playwright e2e suites for the critical flows — blocked on Phase 4 (frontend)
 
 ## 6. Open questions
 

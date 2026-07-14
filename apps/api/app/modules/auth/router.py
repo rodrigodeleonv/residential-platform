@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Depends, Response
 from fastapi.responses import JSONResponse
 
 from app.config import Settings, SettingsDep
@@ -7,6 +7,7 @@ from app.email import EmailDep
 from app.modules.auth import service
 from app.modules.auth.deps import SESSION_COOKIE, SessionCookie
 from app.modules.auth.schemas import RequestCode, VerifyCode
+from app.rate_limit import rate_limit
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -30,7 +31,11 @@ def _invalid_credentials() -> JSONResponse:
     )
 
 
-@router.post("/request-code", status_code=202)
+@router.post(
+    "/request-code",
+    status_code=202,
+    dependencies=[Depends(rate_limit("request-code"))],
+)
 async def request_code(
     payload: RequestCode, db: DbSession, provider: EmailDep, settings: SettingsDep
 ) -> dict[str, str]:
@@ -38,7 +43,7 @@ async def request_code(
     return {"detail": "If the email is registered, a login code was sent"}
 
 
-@router.post("/verify")
+@router.post("/verify", dependencies=[Depends(rate_limit("verify"))])
 async def verify_code(
     payload: VerifyCode, db: DbSession, settings: SettingsDep
 ) -> Response:
@@ -50,7 +55,7 @@ async def verify_code(
     return response
 
 
-@router.get("/magic")
+@router.get("/magic", dependencies=[Depends(rate_limit("magic"))])
 async def magic_link(token: str, db: DbSession, settings: SettingsDep) -> Response:
     session_token = await service.verify_magic_token(db, token, settings)
     if session_token is None:

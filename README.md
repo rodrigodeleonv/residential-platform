@@ -56,3 +56,4 @@ All of these must pass before committing.
 
 - [`docs/development-plan.md`](docs/development-plan.md) — business rules, architecture decisions, and phased roadmap.
 - [`docs/implementation-guide.md`](docs/implementation-guide.md) — code structure, conventions, and how-to details.
+- [`docs/deployment.md`](docs/deployment.md) — production deployment (`docker-compose.prod.yml`, TLS, backups).

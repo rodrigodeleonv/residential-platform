@@ -1,0 +1,50 @@
+# Production stack. Usage and required variables: docs/deployment.md
+#
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Compose interpolates ${...} from a `.env` file next to this file.
+name: residential
+
+services:
+  postgres:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: residential
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: residential
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U residential -d residential"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: apps/api
+    restart: unless-stopped
+    # Migrations run on start; safe because the api runs as a single replica.
+    command: >
+      sh -c "alembic upgrade head &&
+             exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers"
+    # Deployment policy values (currency, visit windows, ...) go in api.env;
+    # `environment` entries below win over api.env, so the core wiring is fixed.
+    env_file:
+      - path: api.env
+        required: false
+    environment:
+      APP_ENVIRONMENT: production
+      APP_DATABASE_URL: postgresql+asyncpg://residential:${POSTGRES_PASSWORD}@postgres:5432/residential
+      APP_APP_BASE_URL: ${APP_BASE_URL:?set APP_BASE_URL in .env (public https URL)}
+      # Only the local reverse proxy can reach the port (see ports:), so
+      # trusting X-Forwarded-* from any peer is safe here.
+      FORWARDED_ALLOW_IPS: "*"
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

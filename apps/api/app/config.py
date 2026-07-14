@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     session_ttl_days: int = 30
     login_code_ttl_minutes: int = 10
     login_code_max_attempts: int = 5
+    # Throttle for the login endpoints, per client IP per endpoint.
+    auth_rate_limit_attempts: int = 10
+    auth_rate_limit_window_minutes: int = 15
     # Deployment-specific policy values: generic defaults here, real values via env.
     currency: Literal["GTQ", "USD"] = "GTQ"  # currency for fees and charges
     parking_spots_per_unit: int = 2
