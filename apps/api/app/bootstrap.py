@@ -6,6 +6,7 @@ Usage: uv run python -m app.bootstrap <email> <full name>
 import asyncio
 import sys
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 import app.all_models  # noqa: F401  (RoleAssignment references other modules' tables)
@@ -14,18 +15,24 @@ from app.modules.users.models import Role, RoleAssignment, User
 
 
 async def create_admin(email: str, full_name: str) -> None:
+    email = email.lower()
     engine = create_async_engine(get_settings().database_url)
     factory = async_sessionmaker(engine, expire_on_commit=False)
     async with factory() as db, db.begin():
-        db.add(
-            User(
-                email=email.lower(),
-                full_name=full_name,
-                role_assignments=[RoleAssignment(role=Role.ADMIN)],
+        exists = await db.scalar(select(User.id).where(User.email == email)) is not None
+        if not exists:
+            db.add(
+                User(
+                    email=email,
+                    full_name=full_name,
+                    role_assignments=[RoleAssignment(role=Role.ADMIN)],
+                )
             )
-        )
     await engine.dispose()
-    print(f"Admin {email} created. Log in via /auth/request-code.")
+    if exists:
+        print(f"User {email} already exists; nothing to do.")
+    else:
+        print(f"Admin {email} created. Log in via /auth/request-code.")
 
 
 if __name__ == "__main__":

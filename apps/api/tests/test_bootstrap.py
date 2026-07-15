@@ -18,17 +18,21 @@ from app.config import Settings
 API_DIR = Path(__file__).parent.parent
 
 
-async def test_bootstrap_creates_first_admin(
-    engine: AsyncEngine, settings: Settings
-) -> None:
-    email = f"first-admin-{secrets.token_hex(4)}@example.com"
-    result = subprocess.run(
+def run_bootstrap(email: str, settings: Settings) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
         ["uv", "run", "python", "-m", "app.bootstrap", email, "First Admin"],
         cwd=API_DIR,
         env=os.environ | {"APP_DATABASE_URL": settings.database_url},
         capture_output=True,
         text=True,
     )
+
+
+async def test_bootstrap_creates_first_admin(
+    engine: AsyncEngine, settings: Settings
+) -> None:
+    email = f"first-admin-{secrets.token_hex(4)}@example.com"
+    result = run_bootstrap(email, settings)
     try:
         assert result.returncode == 0, result.stderr
         async with engine.connect() as conn:
@@ -40,6 +44,11 @@ async def test_bootstrap_creates_first_admin(
                 {"email": email},
             )
         assert role == "admin"
+
+        # Running it again must be a friendly no-op, not a crash.
+        rerun = run_bootstrap(email, settings)
+        assert rerun.returncode == 0, rerun.stderr
+        assert "already exists" in rerun.stdout
     finally:
         # The script commits for real (no fixture rollback); clean up.
         async with engine.begin() as conn:
