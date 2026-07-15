@@ -8,6 +8,7 @@ import sys
 
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+import app.all_models  # noqa: F401  (RoleAssignment references other modules' tables)
 from app.config import get_settings
 from app.modules.users.models import Role, RoleAssignment, User
 

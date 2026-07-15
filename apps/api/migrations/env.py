@@ -6,15 +6,8 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-# Import every module's models so autogenerate sees the full metadata.
-import app.modules.audit.models
-import app.modules.auth.models
-import app.modules.billing.models
-import app.modules.reservations.models
-import app.modules.units.models
-import app.modules.users.models
-import app.modules.vehicles.models
-import app.modules.visitors.models  # noqa: F401
+# Register every module's models so autogenerate sees the full metadata.
+import app.all_models  # noqa: F401
 from app.config import get_settings
 from app.models import Base
 
