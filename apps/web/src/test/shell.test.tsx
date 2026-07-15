@@ -5,14 +5,20 @@ import { admin, owner, renderApp, stubApi } from "./utils";
 
 describe("role-aware shell", () => {
   it("shows the Users section to admins", async () => {
-    stubApi({ "GET /api/v0/users/me": { json: admin } });
+    stubApi({
+      "GET /api/v0/users/me": { json: admin },
+      "GET /api/v0/units/mine": { json: [] },
+    });
     renderApp("/");
 
     expect(await screen.findByRole("link", { name: "Users" })).toBeInTheDocument();
   });
 
   it("hides the Users section from residents", async () => {
-    stubApi({ "GET /api/v0/users/me": { json: owner } });
+    stubApi({
+      "GET /api/v0/users/me": { json: owner },
+      "GET /api/v0/units/mine": { json: [] },
+    });
     renderApp("/");
 
     expect(await screen.findByText("Hello, Olga Owner")).toBeInTheDocument();
@@ -20,7 +26,10 @@ describe("role-aware shell", () => {
   });
 
   it("sends a resident visiting /users back home", async () => {
-    stubApi({ "GET /api/v0/users/me": { json: owner } });
+    stubApi({
+      "GET /api/v0/users/me": { json: owner },
+      "GET /api/v0/units/mine": { json: [] },
+    });
     renderApp("/users");
 
     expect(await screen.findByText("Hello, Olga Owner")).toBeInTheDocument();

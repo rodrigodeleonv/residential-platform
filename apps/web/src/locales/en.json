@@ -5,11 +5,22 @@
   "common": {
     "loading": "Loading…",
     "error": "Something went wrong, try again",
-    "logout": "Log out"
+    "noAccess": "You don't have access to this section",
+    "logout": "Log out",
+    "create": "Create",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "actions": "Actions",
+    "open": "Open",
+    "empty": "No records"
   },
   "nav": {
     "home": "Home",
-    "users": "Users"
+    "users": "Users",
+    "units": "Units",
+    "billing": "Billing",
+    "areas": "Areas",
+    "gatehouse": "Gatehouse"
   },
   "login": {
     "title": "Sign in",
@@ -24,7 +35,9 @@
   },
   "home": {
     "greeting": "Hello, {{name}}",
-    "rolesTitle": "Your roles"
+    "rolesTitle": "Your roles",
+    "myUnits": "My units",
+    "noUnits": "You have no assigned units."
   },
   "roles": {
     "admin": "Administration",
@@ -41,5 +54,152 @@
     "status": "Status",
     "active": "Active",
     "inactive": "Inactive"
+  },
+  "unit": {
+    "title": "Unit {{number}}",
+    "kind": "Type",
+    "kinds": {
+      "apartment": "Apartment",
+      "house": "House"
+    },
+    "building": "Building",
+    "floor": "Floor",
+    "number": "Number",
+    "tabs": {
+      "vehicles": "Vehicles",
+      "visitors": "Visitors",
+      "reservations": "Reservations",
+      "statement": "Statement",
+      "people": "People"
+    }
+  },
+  "vehicles": {
+    "plate": "Plate",
+    "description": "Description",
+    "add": "Register vehicle",
+    "parkingSpots": "Assigned parking spots",
+    "noVehicles": "No vehicles registered.",
+    "noSpots": "No assigned parking spots."
+  },
+  "visitors": {
+    "visitorName": "Visitor name",
+    "visitorPlate": "Plate (optional)",
+    "kind": "Kind",
+    "oneOff": "One-off",
+    "recurring": "Recurring",
+    "startsAt": "Date and time",
+    "expiration": "Validity window (hours)",
+    "weekday": "Weekday",
+    "timeOfDay": "Time",
+    "validFrom": "From",
+    "validUntil": "Until",
+    "add": "Pre-register visit",
+    "noPreregs": "No pre-registered visits."
+  },
+  "reservations": {
+    "area": "Area",
+    "day": "Day",
+    "slot": "Time slot",
+    "slots": {
+      "morning": "Morning (06–12)",
+      "afternoon": "Afternoon (12–18)",
+      "evening": "Evening (18–24)"
+    },
+    "fee": "Fee",
+    "available": "{{count}} available",
+    "book": "Book",
+    "canceled": "Canceled",
+    "noReservations": "No reservations.",
+    "checkAvailability": "Check availability"
+  },
+  "statement": {
+    "pending": "Pending charges",
+    "pendingTotal": "Pending total",
+    "paid": "Paid history",
+    "kind": "Kind",
+    "kinds": {
+      "maintenance": "Maintenance",
+      "reservation": "Reservation",
+      "fine": "Fine"
+    },
+    "description": "Description",
+    "amount": "Amount",
+    "date": "Date",
+    "paidAt": "Paid on"
+  },
+  "people": {
+    "owners": "Owners",
+    "tenants": "Tenants",
+    "assignOwner": "Assign owner",
+    "user": "User",
+    "registerTenant": "Register tenant",
+    "startsOn": "Contract start",
+    "endsOn": "Contract end",
+    "revoke": "Revoke",
+    "noOwners": "No assigned owners.",
+    "noTenants": "No tenants."
+  },
+  "unitsAdmin": {
+    "buildings": "Buildings",
+    "newBuilding": "New building",
+    "name": "Name",
+    "units": "Units",
+    "newUnit": "New unit",
+    "visitorSpots": "Visitor parking spots",
+    "newSpot": "New spot",
+    "spotNumber": "Spot number"
+  },
+  "billing": {
+    "infractions": "Infraction catalog",
+    "newInfraction": "New infraction",
+    "fineAmount": "Fine amount",
+    "active": "Active",
+    "inactive": "Inactive",
+    "charges": "Charges",
+    "allUnits": "All units",
+    "newCharge": "New maintenance charge",
+    "issueFine": "Issue fine",
+    "unit": "Unit",
+    "status": "Status",
+    "statusAll": "All",
+    "statusPending": "Pending",
+    "statusPaid": "Paid",
+    "statusVoided": "Voided",
+    "markPaid": "Mark paid"
+  },
+  "areas": {
+    "catalog": "Area catalog",
+    "newArea": "New area",
+    "capacity": "Capacity",
+    "fee": "Fee per slot",
+    "active": "Active",
+    "inactive": "Inactive",
+    "deactivate": "Deactivate",
+    "activate": "Activate",
+    "overview": "Reservations",
+    "anyArea": "All areas",
+    "anyDay": "Any day"
+  },
+  "gatehouse": {
+    "findUnit": "Find unit",
+    "searchPlaceholder": "House or apartment number…",
+    "residents": "Residents",
+    "plates": "Plates",
+    "spots": "Parking spots",
+    "activePreregs": "Active pre-registrations",
+    "noActivePreregs": "No active pre-registrations right now.",
+    "registerEntry": "Register entry",
+    "visitorSpot": "Visitor parking spot",
+    "noSpot": "No spot",
+    "authorization": "Authorization",
+    "flowA": "Resident approves (phone call)",
+    "flowB": "Valid pre-registration",
+    "authorizedBy": "Approving resident",
+    "prereg": "Pre-registration",
+    "enter": "Enter",
+    "openVisits": "Visitors inside",
+    "exit": "Register exit",
+    "enteredAt": "Entry",
+    "noOpenVisits": "No visitors inside."
   }
 }

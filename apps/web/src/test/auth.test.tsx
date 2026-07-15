@@ -10,6 +10,7 @@ describe("login", () => {
   it("signs in with an email code", async () => {
     stubApi({
       "GET /api/v0/users/me": [UNAUTHENTICATED, { json: owner }],
+      "GET /api/v0/units/mine": { json: [] },
       "POST /api/v0/auth/request-code": { status: 202, json: { detail: "sent" } },
       "POST /api/v0/auth/verify": { json: { detail: "Logged in" } },
     });
@@ -57,6 +58,7 @@ describe("login", () => {
   it("logs out", async () => {
     stubApi({
       "GET /api/v0/users/me": { json: owner },
+      "GET /api/v0/units/mine": { json: [] },
       "POST /api/v0/auth/logout": { status: 204 },
     });
     renderApp("/");

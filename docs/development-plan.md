@@ -89,13 +89,15 @@ Each phase ends with working, tested, deployable software.
 - [x] Vehicle registry per unit: normalized unique plates; more vehicles than spots allowed
 - [x] Resident-only registration enforced (a non-resident owner cannot register vehicles); unit members view, admin overrides
 
-### Phase 4 — Frontend foundation (in progress)
+### Phase 4 — Frontend foundation (done)
 - [x] Prerequisite: Node.js LTS installed (nvm + Node 24), pnpm as package manager (see §3 supply-chain note)
 - [x] Scaffold `apps/web` (Vite + React + TS), i18n ES/EN from day one
-- [x] Auth screens (email → code), session handling (httpOnly cookie, `/users/me` on load)
-- [x] App shell with role-aware navigation + first admin page (users list) proving the pattern
-- [ ] Admin UI + resident UI for the remaining backend features (units, vehicles, visitors, reservations, billing, gatehouse)
-- [ ] Magic-link landing: redirect to the SPA after the API sets the session cookie (small backend tweak; today the link answers with JSON)
+- [x] Auth screens (email → code), session handling (httpOnly cookie, `/users/me` on load); magic link redirects to the SPA
+- [x] App shell with role-aware navigation (resident / admin / guard sections)
+- [x] Resident UI: my units, per-unit tabs — vehicles, visitor pre-registrations (one-off & recurring), reservations (availability + booking + cancel), statement (owners), tenants (owners)
+- [x] Admin UI: users, structure (buildings/units/visitor spots + owners), billing (infraction catalog, charges overview, maintenance charges, fines, mark paid), areas (catalog + reservations overview)
+- [x] Guard UI: gatehouse (unit search + restricted card, active pre-registrations, entry flows A/B with visitor spot, exits) — backed by new guard endpoints (`GET /gatehouse/units`, visitor-spot list opened to guards, `user_id` in the unit card for flow A)
+- Known gap: the pre-registration expiration options are hardcoded in the UI to the default `[1, 2, 4]`; a public config endpoint should expose deployment policy values to the frontend
 
 ### Phase 5 — Visitors & gatehouse (done)
 - [x] Pre-registration by residents: one-off (start + expiration window) or recurring (weekday + time over a bounded range); policy limits (expiration options, advance cap, range cap) configurable via settings

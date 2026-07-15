@@ -96,6 +96,9 @@ class PreRegistrationRead(BaseModel):
 
 
 class GatehouseResident(BaseModel):
+    # user_id is an opaque reference so the guard can record who authorized an
+    # entry (flow A); personal data stays restricted to name and phone.
+    user_id: int
     full_name: str
     phone: str | None
 
@@ -110,6 +113,15 @@ class GatehouseUnitCard(BaseModel):
     residents: list[GatehouseResident]
     plates: list[str]
     parking_spot_numbers: list[str]
+
+
+class GatehouseUnitSummary(BaseModel):
+    """Minimal unit info so the gatehouse can find a unit (no resident data)."""
+
+    unit_id: int
+    kind: str
+    number: str
+    building_name: str | None
 
 
 class VisitEntryCreate(BaseModel):

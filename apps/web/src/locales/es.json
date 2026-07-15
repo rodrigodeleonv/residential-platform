@@ -5,11 +5,22 @@
   "common": {
     "loading": "Cargando…",
     "error": "Algo salió mal, intenta de nuevo",
-    "logout": "Cerrar sesión"
+    "noAccess": "No tienes acceso a esta sección",
+    "logout": "Cerrar sesión",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "actions": "Acciones",
+    "open": "Abrir",
+    "empty": "Sin registros"
   },
   "nav": {
     "home": "Inicio",
-    "users": "Usuarios"
+    "users": "Usuarios",
+    "units": "Unidades",
+    "billing": "Cobros",
+    "areas": "Áreas",
+    "gatehouse": "Garita"
   },
   "login": {
     "title": "Iniciar sesión",
@@ -24,7 +35,9 @@
   },
   "home": {
     "greeting": "Hola, {{name}}",
-    "rolesTitle": "Tus roles"
+    "rolesTitle": "Tus roles",
+    "myUnits": "Mis unidades",
+    "noUnits": "No tienes unidades asignadas."
   },
   "roles": {
     "admin": "Administración",
@@ -41,5 +54,152 @@
     "status": "Estado",
     "active": "Activo",
     "inactive": "Inactivo"
+  },
+  "unit": {
+    "title": "Unidad {{number}}",
+    "kind": "Tipo",
+    "kinds": {
+      "apartment": "Apartamento",
+      "house": "Casa"
+    },
+    "building": "Edificio",
+    "floor": "Nivel",
+    "number": "Número",
+    "tabs": {
+      "vehicles": "Vehículos",
+      "visitors": "Visitas",
+      "reservations": "Reservas",
+      "statement": "Estado de cuenta",
+      "people": "Personas"
+    }
+  },
+  "vehicles": {
+    "plate": "Placa",
+    "description": "Descripción",
+    "add": "Registrar vehículo",
+    "parkingSpots": "Parqueos asignados",
+    "noVehicles": "Sin vehículos registrados.",
+    "noSpots": "Sin parqueos asignados."
+  },
+  "visitors": {
+    "visitorName": "Nombre del visitante",
+    "visitorPlate": "Placa (opcional)",
+    "kind": "Tipo",
+    "oneOff": "Única",
+    "recurring": "Recurrente",
+    "startsAt": "Fecha y hora",
+    "expiration": "Ventana de validez (horas)",
+    "weekday": "Día de la semana",
+    "timeOfDay": "Hora",
+    "validFrom": "Desde",
+    "validUntil": "Hasta",
+    "add": "Pre-registrar visita",
+    "noPreregs": "Sin visitas pre-registradas."
+  },
+  "reservations": {
+    "area": "Área",
+    "day": "Día",
+    "slot": "Horario",
+    "slots": {
+      "morning": "Mañana (06–12)",
+      "afternoon": "Tarde (12–18)",
+      "evening": "Noche (18–24)"
+    },
+    "fee": "Tarifa",
+    "available": "{{count}} disponibles",
+    "book": "Reservar",
+    "canceled": "Cancelada",
+    "noReservations": "Sin reservas.",
+    "checkAvailability": "Ver disponibilidad"
+  },
+  "statement": {
+    "pending": "Cargos pendientes",
+    "pendingTotal": "Total pendiente",
+    "paid": "Historial pagado",
+    "kind": "Tipo",
+    "kinds": {
+      "maintenance": "Mantenimiento",
+      "reservation": "Reserva",
+      "fine": "Multa"
+    },
+    "description": "Descripción",
+    "amount": "Monto",
+    "date": "Fecha",
+    "paidAt": "Pagado el"
+  },
+  "people": {
+    "owners": "Propietarios",
+    "tenants": "Inquilinos",
+    "assignOwner": "Asignar propietario",
+    "user": "Usuario",
+    "registerTenant": "Registrar inquilino",
+    "startsOn": "Inicio del contrato",
+    "endsOn": "Fin del contrato",
+    "revoke": "Revocar",
+    "noOwners": "Sin propietarios asignados.",
+    "noTenants": "Sin inquilinos."
+  },
+  "unitsAdmin": {
+    "buildings": "Edificios",
+    "newBuilding": "Nuevo edificio",
+    "name": "Nombre",
+    "units": "Unidades",
+    "newUnit": "Nueva unidad",
+    "visitorSpots": "Parqueos de visita",
+    "newSpot": "Nuevo parqueo",
+    "spotNumber": "Número de parqueo"
+  },
+  "billing": {
+    "infractions": "Catálogo de infracciones",
+    "newInfraction": "Nueva infracción",
+    "fineAmount": "Monto de la multa",
+    "active": "Activa",
+    "inactive": "Inactiva",
+    "charges": "Cargos",
+    "allUnits": "Todas las unidades",
+    "newCharge": "Nuevo cargo de mantenimiento",
+    "issueFine": "Emitir multa",
+    "unit": "Unidad",
+    "status": "Estado",
+    "statusAll": "Todos",
+    "statusPending": "Pendiente",
+    "statusPaid": "Pagado",
+    "statusVoided": "Anulado",
+    "markPaid": "Marcar pagado"
+  },
+  "areas": {
+    "catalog": "Catálogo de áreas",
+    "newArea": "Nueva área",
+    "capacity": "Capacidad",
+    "fee": "Tarifa por horario",
+    "active": "Activa",
+    "inactive": "Inactiva",
+    "deactivate": "Desactivar",
+    "activate": "Activar",
+    "overview": "Reservas",
+    "anyArea": "Todas las áreas",
+    "anyDay": "Cualquier día"
+  },
+  "gatehouse": {
+    "findUnit": "Buscar unidad",
+    "searchPlaceholder": "Número de casa o apartamento…",
+    "residents": "Residentes",
+    "plates": "Placas",
+    "spots": "Parqueos",
+    "activePreregs": "Pre-registros activos",
+    "noActivePreregs": "Sin pre-registros activos ahora.",
+    "registerEntry": "Registrar ingreso",
+    "visitorSpot": "Parqueo de visita",
+    "noSpot": "Sin parqueo",
+    "authorization": "Autorización",
+    "flowA": "El residente aprueba (llamada)",
+    "flowB": "Pre-registro vigente",
+    "authorizedBy": "Residente que aprueba",
+    "prereg": "Pre-registro",
+    "enter": "Ingresar",
+    "openVisits": "Visitas dentro",
+    "exit": "Registrar salida",
+    "enteredAt": "Ingreso",
+    "noOpenVisits": "No hay visitas dentro."
   }
 }

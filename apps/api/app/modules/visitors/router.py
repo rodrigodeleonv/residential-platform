@@ -3,12 +3,14 @@ from fastapi import APIRouter, HTTPException
 from app.config import SettingsDep
 from app.db import DbSession
 from app.modules.auth.deps import CurrentUser, GuardUser
+from app.modules.units import service as units_service
 from app.modules.units.deps import ResidentUnit, UnitDep
 from app.modules.units.models import Unit
 from app.modules.visitors import service
 from app.modules.visitors.models import VisitLog, VisitPreRegistration
 from app.modules.visitors.schemas import (
     GatehouseUnitCard,
+    GatehouseUnitSummary,
     PreRegistrationCreate,
     PreRegistrationRead,
     PreRegistrationUpdate,
@@ -82,6 +84,22 @@ async def cancel_preregistration(
 
 
 # --- gatehouse (guards and admins) ---
+
+
+@router.get("/gatehouse/units")
+async def gatehouse_list_units(
+    guard: GuardUser, db: DbSession
+) -> list[GatehouseUnitSummary]:
+    """Minimal unit list so the gatehouse can find the visited unit."""
+    return [
+        GatehouseUnitSummary(
+            unit_id=unit.id,
+            kind=unit.kind,
+            number=unit.number,
+            building_name=unit.building.name if unit.building else None,
+        )
+        for unit in await units_service.list_units(db)
+    ]
 
 
 @router.get("/gatehouse/units/{unit_id}")

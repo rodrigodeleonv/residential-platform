@@ -139,7 +139,9 @@ async def test_magic_link_login(
 
     response = await client.get(f"{API}/auth/magic", params={"token": token})
 
-    assert response.status_code == 200
+    # The email link lands the logged-in user on the app itself.
+    assert response.status_code == 303
+    assert response.headers["location"] == "/"
     assert (await client.get(f"{API}/users/me")).status_code == 200
 
 

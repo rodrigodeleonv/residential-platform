@@ -217,7 +217,8 @@ async def unit_card(db: AsyncSession, unit: Unit) -> GatehouseUnitCard:
         number=unit.number,
         building_name=unit.building.name if unit.building else None,
         residents=[
-            GatehouseResident(full_name=r.full_name, phone=r.phone) for r in residents
+            GatehouseResident(user_id=r.id, full_name=r.full_name, phone=r.phone)
+            for r in residents
         ],
         plates=[v.plate for v in await vehicles.list_vehicles(db, unit)],
         parking_spot_numbers=[

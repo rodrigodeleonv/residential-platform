@@ -8,6 +8,7 @@ export function Layout() {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   const isAdmin = user?.roles.includes("admin") ?? false;
+  const isGuard = isAdmin || (user?.roles.includes("guard") ?? false);
 
   return (
     <div className="app">
@@ -17,7 +18,11 @@ export function Layout() {
           <NavLink to="/" end>
             {t("nav.home")}
           </NavLink>
+          {isGuard && <NavLink to="/gatehouse">{t("nav.gatehouse")}</NavLink>}
           {isAdmin && <NavLink to="/users">{t("nav.users")}</NavLink>}
+          {isAdmin && <NavLink to="/admin/units">{t("nav.units")}</NavLink>}
+          {isAdmin && <NavLink to="/admin/billing">{t("nav.billing")}</NavLink>}
+          {isAdmin && <NavLink to="/admin/areas">{t("nav.areas")}</NavLink>}
         </nav>
         <div className="actions">
           <LanguageToggle />

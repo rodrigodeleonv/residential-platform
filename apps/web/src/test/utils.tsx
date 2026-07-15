@@ -2,7 +2,7 @@ import { render, type RenderResult } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { vi } from "vitest";
 
-import type { User } from "../api/types";
+import type { Unit, User } from "../api/types";
 import { App } from "../App";
 
 export const admin: User = {
@@ -21,6 +21,23 @@ export const owner: User = {
   phone: "555-0100",
   is_active: true,
   roles: ["owner"],
+};
+
+export const guard: User = {
+  id: 3,
+  email: "guard@example.com",
+  full_name: "Gus Guard",
+  phone: null,
+  is_active: true,
+  roles: ["guard"],
+};
+
+export const house: Unit = {
+  id: 1,
+  kind: "house",
+  building_id: null,
+  floor: null,
+  number: "H-1",
 };
 
 export function renderApp(path = "/"): RenderResult {

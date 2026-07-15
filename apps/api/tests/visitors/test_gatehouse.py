@@ -55,8 +55,10 @@ async def test_unit_card_shows_restricted_subset_for_actual_residents(
     # rented unit: the guard sees the tenant (who resides), not the owner
     assert [r["full_name"] for r in card["residents"]] == ["Tina Tenant"]
     assert card["number"] == "H-1"
-    # the card never includes emails or ids of residents
-    assert all(set(r) == {"full_name", "phone"} for r in card["residents"])
+    # the card exposes an opaque user_id (needed to record flow-A authorizations)
+    # but never personal data beyond name and phone (no emails).
+    assert all(set(r) == {"user_id", "full_name", "phone"} for r in card["residents"])
+    assert card["residents"][0]["user_id"] == tenant.id
 
 
 async def test_unit_card_requires_guard_role(
@@ -69,6 +71,34 @@ async def test_unit_card_requires_guard_role(
     await login_as(await create_user("resident@example.com"))
 
     assert (await client.get(f"{API}/gatehouse/units/{unit.id}")).status_code == 403
+    assert (await client.get(f"{API}/gatehouse/units")).status_code == 403
+
+
+async def test_guard_lists_units_to_find_the_visited_one(
+    client: AsyncClient,
+    create_unit: UnitFactory,
+    login_as: LoginAs,
+    guard: User,
+) -> None:
+    unit = await create_unit("H-7")
+    await login_as(guard)
+
+    units = (await client.get(f"{API}/gatehouse/units")).json()
+
+    summary = next(u for u in units if u["unit_id"] == unit.id)
+    assert summary["number"] == "H-7"
+    # a summary carries no resident data at all
+    assert set(summary) == {"unit_id", "kind", "number", "building_name"}
+
+
+async def test_guard_lists_visitor_parking_spots(
+    client: AsyncClient,
+    login_as: LoginAs,
+    guard: User,
+) -> None:
+    await login_as(guard)
+
+    assert (await client.get(f"{API}/visitor-parking-spots")).status_code == 200
 
 
 async def test_guard_sees_prereg_only_within_window(

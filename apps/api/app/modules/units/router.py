@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from app.config import SettingsDep
 from app.db import DbSession
 from app.email import EmailDep
-from app.modules.auth.deps import AdminUser, CurrentUser
+from app.modules.auth.deps import AdminUser, CurrentUser, GuardUser
 from app.modules.units import service
 from app.modules.units.deps import ManagedUnit, UnitDep
 from app.modules.units.schemas import (
@@ -84,8 +84,9 @@ async def create_visitor_spot(
 
 @router.get("/visitor-parking-spots")
 async def list_visitor_spots(
-    admin: AdminUser, db: DbSession
+    guard: GuardUser, db: DbSession
 ) -> list[VisitorParkingSpotRead]:
+    """Guards also read this list: they assign a spot when registering an entry."""
     return [
         VisitorParkingSpotRead.model_validate(s)
         for s in await service.list_visitor_spots(db)

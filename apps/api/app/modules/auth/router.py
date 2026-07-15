@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Response
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 
 from app.config import Settings, SettingsDep
 from app.db import DbSession
@@ -60,7 +60,9 @@ async def magic_link(token: str, db: DbSession, settings: SettingsDep) -> Respon
     session_token = await service.verify_magic_token(db, token, settings)
     if session_token is None:
         return _invalid_credentials()
-    response = JSONResponse({"detail": "Logged in"})
+    # The link is clicked in an email client: land the user on the app itself
+    # (same origin as the API behind the reverse proxy).
+    response: Response = RedirectResponse(url="/", status_code=303)
     _set_session_cookie(response, session_token, settings)
     return response
 
